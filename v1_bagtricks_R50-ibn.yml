@@ -1,0 +1,42 @@
+_BASE_: ../Base-bagtricks.yml
+
+INPUT:
+  SIZE_TRAIN: [256, 256]
+  SIZE_TEST: [256, 256]
+
+MODEL:
+  BACKBONE:
+    WITH_IBN: True
+    FEAT_DIM: 2048 # new
+    NORM: "BN" # new
+    PRETRAIN: False # new
+  HEADS:
+    POOL_LAYER: GeneralizedMeanPooling
+    EMBEDDING_DIM: 0 # new
+    WITH_BNNECK: False # new
+
+  LOSSES:
+    TRI:
+      HARD_MINING: False
+      MARGIN: 0.3 # 0.0
+
+DATASETS:
+  NAMES: ("AICUP",)
+  TESTS: ("AICUP",)
+
+SOLVER:
+  BASE_LR: 0.00075 # new
+  BIAS_LR_FACTOR: 1.
+
+  IMS_PER_BATCH: 128
+  MAX_EPOCH: 60
+  STEPS: [30, 50]
+  WARMUP_ITERS: 2000 # new
+
+  CHECKPOINT_PERIOD: 20 # 1
+
+TEST:
+  EVAL_PERIOD: 20 # 60
+  IMS_PER_BATCH: 256
+
+OUTPUT_DIR: logs/AICUP_115/bagtricks_R50-ibn
